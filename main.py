@@ -1,7 +1,9 @@
 import os
 import io
+from io import BytesIO
 from PIL import Image
 from flask import Flask, render_template, request, redirect,jsonify
+import base64
 
 # check for image files
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'JPG', 'PNG', 'bmp'])
@@ -17,10 +19,8 @@ def upload_file():
         file = request.files.get('file')
         if not file:
             return
-        img_bytes = file.read()
-        image = Image.open(io.BytesIO(img_bytes))
-        outpath = './static/test.png'
-        image.save(outpath)
+        figfile = io.BytesIO(file.read())
+        image = Image.open(figfile)
 
         # read added information
         user_input = request.form.get("name")
@@ -28,8 +28,13 @@ def upload_file():
         # deep learning process image
         # res_img = model.forward(image)
 
+        # img = base64.b64encode(figfile.getvalue()).decode('ascii')        # for byte type
+        output_buffer = BytesIO()                                           # for PIL.Image
+        image.save(output_buffer, format='JPEG')
+        img = base64.b64encode(output_buffer.getvalue()).decode('ascii')  
+
         
-        return render_template('result.html', outpath=outpath)
+        return render_template('result.html', user_input=user_input, img=img)
 
     return render_template('index.html')
 

@@ -22,8 +22,7 @@
   </head>
   <body class="text-center">
     <form class="form-signin" method=post enctype=multipart/form-data>
-        <!-- <img class="mb-4" src="/static/pytorch.png" alt="" width="72"> -->
-        <img src="{{ url_for('static', filename= '../static/pytorch.png',_t=val1) }}" width="300" alt="The processed image"/>
+        <img class="mb-4" src="data:;base64,{{ img }}" width="300" alt="The processed image" />
         <h1 class="h3 mb-3 font-weight-normal">Prediction</h1>
         <h5 class="h5 mb-3 font-weight-normal">Detected Image: {{ class_name }}</h5>
         <h5 class="h6 mb-3 font-weight-normal">ImageNet Class ID: {{ class_id }}</h5>
